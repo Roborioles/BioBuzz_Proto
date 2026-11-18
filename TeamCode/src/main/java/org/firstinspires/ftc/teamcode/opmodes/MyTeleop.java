@@ -24,6 +24,12 @@ public class MyTeleop extends NextOpMode {
         gp1.leftBumper().onTrue(robot.launcher.speedup());
         gp1.rightBumper().onTrue(robot.launcher.slowdown());
 
+        gp1.a().onTrue(robot.launcher2.slowdownBottom());
+        gp1.b().onTrue(robot.launcher2.speedupBottom());
+
+        gp1.x().onTrue(robot.launcher2.slowdownTop());
+        gp1.y().onTrue(robot.launcher2.speedupTop());
+
         // Drive motor wiring test bindings
         //gp1.a().onTrue(robot.drivetrain.runFrontLeft()).onFalse(robot.drivetrain.stopMotors());
         //gp1.b().onTrue(robot.drivetrain.runFrontRight()).onFalse(robot.drivetrain.stopMotors());
@@ -43,6 +49,11 @@ public class MyTeleop extends NextOpMode {
         //gp1.b().onTrue(robot.intake.resetCount());
         Telemetry.log("Launcher Target RPM: ", robot.launcher.targetRPM);
         Telemetry.log("Launcher Current RPM: ", robot.launcher.getCurrentRPM());
+        Telemetry.log("Launcher Two Top Target RPM: ", robot.launcher2.targetTopRPM);
+        Telemetry.log("Launcher Top Top Current RPM: ", robot.launcher2.getCurrentTopRPM());
+        Telemetry.log("Launcher Two Bottom Target RPM: ", robot.launcher2.targetBottomRPM);
+        Telemetry.log("Launcher Top Bottom Current RPM: ", robot.launcher2.getCurrentBottomRPM());
+
     }
 
 }

@@ -18,6 +18,7 @@ public class LauncherVel implements Mechanism {
 
     public LauncherVel() {
         // Configure launchfollower to follow launcher motor in REVERSE
+        launcher.setDirection(NextMotor.Direction.REVERSE);
         launchfollower.follow(launcher, NextMotor.Direction.REVERSE);
 
         // Feedforward-dominant tuning for high-inertia launcher flywheels:
