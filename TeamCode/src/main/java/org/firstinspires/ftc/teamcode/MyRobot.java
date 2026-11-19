@@ -14,11 +14,10 @@ import dev.nextftc.robot.NextRobot;
 public class MyRobot implements NextRobot {
 //    public Intake intake = new Intake();
     public Drivetrain drivetrain = new Drivetrain();
-    public LauncherVel launcher = new LauncherVel();
-    public LauncherVelTwo launcher2 = new LauncherVelTwo();
+    public Launcher launcher = new Launcher();
 
     @Override
     public Set<Mechanism> getMechanisms() {
-        return Set.of(drivetrain, launcher, launcher2);
+        return Set.of(drivetrain, launcher);
     }
 }

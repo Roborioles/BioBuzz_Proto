@@ -6,26 +6,59 @@ import dev.nextftc.hardware.actuators.NextMotor;
 import dev.nextftc.robot.Mechanism;
 
 public class Launcher implements Mechanism {
-    NextMotor launcher = new NextMotor("launcher");
+    private final NextMotor launcher = new NextMotor("launcher");
     public double speed = 0;
+    private double encoderCountsPerRev = 28;
+    // kV = 0.000172, kS = 0.32, Kp = 0.0006;
+    private double kV = 0.000178, kS = 0.32, kP = 0.0006;
+    public double goalRPM = 0;
+
+    public void init() {
+        launcher.setDirection(NextMotor.Direction.REVERSE);
+    }
+
+    public void setRPM(double targetRPM) {
+        if (targetRPM <= 0) {
+            setMotorPower(0);
+            return;
+        }
+        double feedForward = (kV * targetRPM) + kS;
+        double error = targetRPM - getRPM();
+        double feedBack = kP * error;
+        setMotorPower(feedForward + feedBack);
+    }
+
+    public void setMotorPower(double Power) {
+        Power = Math.min(1.0, Math.max(-1.0, Power));
+        launcher.setThrottle(Power);
+    }
+
+    public double getTicksPerSec() { return launcher.getEncoderVelocity().getMagnitude(); }
+
+    public double getRPM(){
+        return getTicksPerSec() * 60 / encoderCountsPerRev;
+    }
+
     public void increaseSpeed() {
-        speed = Math.min(1.0, speed + 0.05);
-        launcher.setThrottle(speed);
+        goalRPM+=50;
     }
 
     public void decreaseSpeed() {
-        speed = Math.max(-1.0, speed - 0.05);
-        launcher.setThrottle(speed);
+        goalRPM-=50;
+    }
+    public double getkP() {
+        return kP;
     }
 
-    public void stop() {
-        speed = 0;
-        launcher.setThrottle(0);
+    @Override
+    public void periodic() {
+        setRPM(goalRPM);
     }
-//    public void periodic() {
-//        launcher.setThrottle(speed);
-//    }
 
+    public Command increasekP() { return instant(() -> kP += 0.00001); }
+    public Command decreasekP() { return instant(() -> kP -= 0.00001); }
+    public Command startLauncher() { return instant(() -> goalRPM=2700); }
+    public Command stopLauncher() { return instant(() -> goalRPM=0); }
     public Command speedup() { return instant(() -> increaseSpeed()); }
     public Command slowdown() { return instant(() -> decreaseSpeed()); }
 }

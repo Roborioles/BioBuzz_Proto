@@ -15,6 +15,7 @@ public class LauncherVel implements Mechanism {
     NextMotor launcher = new NextMotor("launcher", Units.getRadians((2.0 * Math.PI) / COUNTS_PER_REV));
     NextMotor launchfollower = new NextMotor("launchfollower") ;
     public double targetRPM = 0;
+    // kV = 0.000172, kS = 0.32, Kp = 0.0006;
 
     public LauncherVel() {
         // Configure launchfollower to follow launcher motor in REVERSE
@@ -23,25 +24,25 @@ public class LauncherVel implements Mechanism {
 
         // Feedforward-dominant tuning for high-inertia launcher flywheels:
         // kS: Static friction feedforward offset (~0.02)
-        launcher.getVelocityConstants().setKS(0.02);
+        launcher.getVelocityConstants().setKS(0.32);
 
         // kV: Velocity feedforward gain = (1 - kS) / Max Rad/Sec
-        launcher.getVelocityConstants().setKV((1.0 - 0.02) / MAX_RAD_PER_SEC);
+        launcher.getVelocityConstants().setKV(0.000172);
 
         // kP: Small proportional gain for mild feedback correction
-        launcher.getVelocityConstants().setKP(0.002);
+        launcher.getVelocityConstants().setKP(0.0006);
 
         // kI: ZERO to prevent integral windup and flywheel surging/oscillation
         launcher.getVelocityConstants().setKI(0.0);
     }
 
     public void increaseSpeed() {
-        targetRPM = Math.min(MAX_RPM, targetRPM + 100);
+        targetRPM = Math.min(MAX_RPM, targetRPM + 50);
         updateVelocity();
     }
 
     public void decreaseSpeed() {
-        targetRPM = Math.max(0, targetRPM - 100);
+        targetRPM = Math.max(0, targetRPM - 50);
         updateVelocity();
     }
 
@@ -62,4 +63,6 @@ public class LauncherVel implements Mechanism {
 
     public Command speedup() { return instant(() -> increaseSpeed()); }
     public Command slowdown() { return instant(() -> decreaseSpeed()); }
+    public Command stopLauncher() { return instant(() -> stop()); }
+    public Command runLauncher() { return instant(() -> targetRPM=2700); }
 }
