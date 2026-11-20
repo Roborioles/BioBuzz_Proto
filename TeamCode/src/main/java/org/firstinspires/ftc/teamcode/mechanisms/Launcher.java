@@ -3,10 +3,12 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 import com.pedropathing.ivy.Command;
 
 import dev.nextftc.hardware.actuators.NextMotor;
+import dev.nextftc.hardware.actuators.NextServo;
 import dev.nextftc.robot.Mechanism;
 
 public class Launcher implements Mechanism {
     private final NextMotor launcher = new NextMotor("launcher");
+    private final NextServo goLight = new NextServo("goLight");
     public double speed = 0;
     private double encoderCountsPerRev = 28;
     // kV = 0.000172, kS = 0.32, Kp = 0.0006;
@@ -53,6 +55,13 @@ public class Launcher implements Mechanism {
     @Override
     public void periodic() {
         setRPM(goalRPM);
+        if (goalRPM == 0) {
+            goLight.setPosition(0.0);
+        } else if (Math.abs(getRPM() - goalRPM) <= 50) {
+            goLight.setPosition(0.444);
+        } else {
+            goLight.setPosition(0.277);
+        }
     }
 
     public Command increasekP() { return instant(() -> kP += 0.00001); }
