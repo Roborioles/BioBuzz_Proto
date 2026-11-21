@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp
 public class kSTuner extends OpMode {
     Flywheel flywheel = new Flywheel();
-    public double kS = 0;
+    public double kS = 0.35;
     double[] increments = {0.000001,0.0001,0.0001,0.001,0.01};
     int incrementIndex = 4;
 

@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp
 public class kPTuner extends OpMode {
     Flywheel flywheel = new Flywheel();
-    public double kV = 0.000172;
-    public double kS = 0.32;
+    public double kV = 0.001242;
+    public double kS = 0.26;
     public double kP = 0.0006;
     public double goalRPM = 2700;
     double[] increments = {0.0000001, 0.000001, 0.0001, 0.0001, 0.001, 0.01};
@@ -50,7 +50,8 @@ public class kPTuner extends OpMode {
 
         telemetry.addData("kP","%.6f",kP);
         telemetry.addData("Error", error);
-        telemetry.addData("Top RPM","%.6f",flywheel.getRPM());
+        telemetry.addData("Motor RPM","%.6f",flywheel.getRPM());
+        telemetry.addData("Launch RPM", flywheel.getRPM());
         telemetry.addData("goalRPM", goalRPM);
         telemetry.update();
     }

@@ -8,6 +8,7 @@ import dev.nextftc.robot.Mechanism;
 
 public class Launcher implements Mechanism {
     private final NextMotor launcher = new NextMotor("launcher");
+    private final NextMotor launchfollower = new NextMotor("launchfollower");
     private final NextServo goLight = new NextServo("goLight");
     public double speed = 0;
     private double encoderCountsPerRev = 28;
@@ -16,7 +17,9 @@ public class Launcher implements Mechanism {
     public double goalRPM = 0;
 
     public void init() {
+
         launcher.setDirection(NextMotor.Direction.REVERSE);
+        launchfollower.follow(launcher, NextMotor.Direction.REVERSE);
     }
 
     public void setRPM(double targetRPM) {

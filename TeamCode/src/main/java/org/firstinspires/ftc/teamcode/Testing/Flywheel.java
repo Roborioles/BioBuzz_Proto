@@ -8,7 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Flywheel {
     private DcMotorEx top;
     private double encoderCountsPerRev = 28;
-    private double kV = 0.000172, kS = 0.32, Kp = 0.0006;
+    private double kV = 0.000242, kS = 0.35, Kp = 0.0006;
+    double gearRatio = 1.5;
 
     public void init(HardwareMap hwMap) {
         top = hwMap.get(DcMotorEx.class, "launcher");
@@ -24,7 +25,8 @@ public class Flywheel {
         return top.getVelocity();
     }
 
-    public double getRPM(){
-        return getTicksPerSec() * 60 / encoderCountsPerRev;
+    public double getLaunchRPM(){
+        return ((getTicksPerSec()/encoderCountsPerRev) * 60) / gearRatio;
     }
+    public double getRPM() { return ((getTicksPerSec()/encoderCountsPerRev) * 60); }
 }
